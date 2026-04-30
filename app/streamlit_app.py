@@ -161,12 +161,14 @@ with tab2:
         sex_encoded = prog_enc.transform([sex_2])[0]
 
         features = pd.DataFrame([[
-            sex_encoded, prev_total, prev_gl, prev_bw, next_bw, bw_change, 
+            sex_encoded, prev_total, prev_gl,
+            prev_bw, next_bw, bw_change,
             age_next, months_gap, meet_num
         ]], columns=[
-            "Sex", "PrevTotal", "PrevGL", "PrevBW", "NextBW", "BWChange",
-            "AgeNext", "MonthsGap", "MeetNum"
-        ])
+                'Sex', 'prev_total', 'prev_gl',
+                'prev_bodyweight', 'next_bodyweight', 'bw_change',
+                'age_at_next', 'months_between', 'meet_number'
+            ])
 
         pred_next = prog_model.predict(features)[0]
 
