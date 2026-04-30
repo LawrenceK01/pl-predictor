@@ -37,12 +37,8 @@ def train():
     le = LabelEncoder()
     df['Sex'] = le.fit_transform(df['Sex']) # F=0, M=1
 
-    # Add BodyweightKg^2 and Age^2 as features
-    df['BodyweightKg^2'] = df['BodyweightKg'] ** 2
-    df['Age^2'] = df['Age'] ** 2
 
-
-    X = df[['Sex', 'Age', 'Age^2', 'BodyweightKg', 'BodyweightKg^2']]
+    X = df[['Sex', 'Age','BodyweightKg']]
     y = df['TotalKg']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
