@@ -57,8 +57,13 @@ def engineer_features(df):
 
             months_between = (next_meet['Date'] - current['Date']).days / 30.44
 
-            # Skip if gap is unrealistically long (10+ years) or negative
-            if months_between <= 0 or months_between > 120:
+            # Skip if time between meets is unrealistically long (5+ years) or negative
+            if months_between <= 0 or months_between > 60:
+                continue
+
+            # Skip if bw change is unrealistically large (50+ kg)
+            bw_change = next_meet['BodyweightKg'] - current['BodyweightKg']
+            if abs(bw_change) > 50:
                 continue
 
             rows.append({
@@ -67,7 +72,7 @@ def engineer_features(df):
                 'prev_gl':          current['Goodlift'],
                 'prev_bodyweight':  current['BodyweightKg'],
                 'next_bodyweight':  next_meet['BodyweightKg'],
-                'bw_change':        next_meet['BodyweightKg'] - current['BodyweightKg'],
+                'bw_change':        bw_change,
                 'age_at_next':      next_meet['Age'],
                 'months_between':   months_between,
                 'meet_number':      i + 1,  # which meet in lifter's career
