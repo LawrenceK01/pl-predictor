@@ -5,13 +5,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
-from sqlalchemy import create_engine
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-DB_PATH    = os.path.join(BASE_DIR, "data", "powerlifting.db")
 POP_MODEL  = os.path.join(BASE_DIR, "models", "xgb_model.joblib")
 POP_ENC    = os.path.join(BASE_DIR, "models", "label_encoder.joblib")
 PROG_MODEL = os.path.join(BASE_DIR, "models", "progression_model.joblib")
@@ -29,21 +27,8 @@ def load_models():
 # Load reference data for percentile calc
 @st.cache_data
 def load_reference_data():
-    engine = create_engine(f'sqlite:///{DB_PATH}')
-    query = """
-        SELECT Sex, Age, BodyweightKg, TotalKg
-        FROM meets
-        WHERE Equipment = 'Raw'
-            AND Event = 'SBD'
-            AND TotalKg IS NOT NULL
-            AND Age IS NOT NULL
-            AND BodyweightKg IS NOT NULL
-            AND Sex IN ('M', 'F')
-            AND Place NOT IN ('DQ', 'G', 'NS')
-            AND Age >= 14
-            AND Age <= 80
-        """
-    return pd.read_sql(query, engine)
+    ref_path = os.path.join(BASE_DIR, "data", "reference_totals.csv")
+    return pd.read_csv(ref_path)
 
 # Page Config
 st.set_page_config(
